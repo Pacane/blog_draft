@@ -25,9 +25,11 @@ Unfortunately, not all situations are like that. Take for example an application
 ### Mockist TDD
 Also called London School TDD, this approach was popularized by [Steve Freeman and Nat Pryce](http://www.growing-object-oriented-software.com/), and is focused on verifying interactions of a class within its ecosystem. It is also a good tool to drive the design of an application.
 
-One of the strenghts of mockist TDD is that it helps organizing layers and dependencies of an application. For example a lot of tests written using this kind of TDD will consist in checking that a class delegates to the correct collaborator, and that this communication doesn't bypass layers.
+One of the strenghts of mockist TDD is that it helps organizing layers and dependencies of an application. For example a lot of tests written using this kind of TDD will consist in checking that a class delegates an action the correct collaborator with the correct values.
 
-Here's a demonstration of JB Rainsburger developing an application using [Mockist TDD](https://vimeo.com/37595051)
+This kind of test helps verifying the communication doesn't bypass layers of the application. It also helps ensuring that the [Tell don't ask principle](http://programmers.stackexchange.com/a/157527) is respected.
+
+Here's a demonstration of JB Rainsburger developing an application using [Mockist TDD](https://vimeo.com/37595051). 
 
 ## Dependency Injection
 Most of the time, when a class starts doing too much job, it is wise to split it up in smaller pieces. When testing a class, one of the best practices is to isolate it from the outside world (outside world being: anything too complex, impredictable or that doesn't belong in the same level of abstraction). 
@@ -48,11 +50,23 @@ In a mockist TDD context, one would pass `A`'s collaborators by constructor para
 
 A Mock is an object that has expectations of interactions with other objects. It is used to verify that a call that was expected to happen really happened.
 
-Martin Fowler wrote a good [reference](http://martinfowler.com/articles/mocksArentStubs.html#TheDifferenceBetweenMocksAndStubs) on the different types of test doubles.
+Martin Fowler wrote a good [reference](http://martinfowler.com/articles/mocksArentStubs.html#TheDifferenceBetweenMocksAndStubs) on the different types of test doubles. And Mark Seeman has a super [article](http://blog.ploeh.dk/2013/10/23/mocks-for-commands-stubs-for-queries/http://blog.ploeh.dk/2013/10/23/mocks-for-commands-stubs-for-queries/) explaining when to use Mocks and Stubs.
 
 ## Conclusion
+As a summary, classic TDD works better when testing algorithms and mockist TDD is better when verifying interactions between components of a system. 
+
+In general using dependency injection shows a class' dependencies explicitly, and allows to substitute them easily by objects having controlled and predictable behaviours (test doubles).
+
 This post was to introduce the building blocks for the next articles. Don't worry, there will be more code and less theory in the next ones.
 
 The next article will be an overview of Jukito, a library built on top of JUnit and Mockito. Knowing how to use Jukito will be pretty important; although it is not necessary to testing a GWTP application, it will be used for the rest of the series, as it helps saving a lot of time.
 
 Register to our news letter to be notified when the next post comes out!
+
+## Other good references
+[TestDrivenDevelopment - Martin Fowler](http://martinfowler.com/bliki/TestDrivenDevelopment.html)
+[Outside in development with double loop tdd - Emily Bache](http://coding-is-like-cooking.info/2013/04/outside-in-development-with-double-loop-tdd/)
+[Unit Testing - Misko Hevery](https://www.youtube.com/watch?v=wEhu57pih5w)
+[Don't look for things - Misko Hevery](https://www.youtube.com/watch?v=RlfLCWKxHJ0)
+[Growing Object-Oriented Sofrware, Guided by Tests](http://www.amazon.com/dp/0321503627/?tag=ebooks0056-20)
+[Mocks for Commands, Stubs for Queries](http://blog.ploeh.dk/2013/10/23/mocks-for-commands-stubs-for-queries/)
