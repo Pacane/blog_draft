@@ -64,9 +64,9 @@ The next article will be an overview of Jukito, a library built on top of JUnit 
 Register to our news letter to be notified when the next post comes out!
 
 ## Other good references
-[TestDrivenDevelopment - Martin Fowler](http://martinfowler.com/bliki/TestDrivenDevelopment.html)
-[Outside in development with double loop TDD - Emily Bache](http://coding-is-like-cooking.info/2013/04/outside-in-development-with-double-loop-tdd/)
-[Unit Testing - Misko Hevery](https://www.youtube.com/watch?v=wEhu57pih5w)
-[Don't look for things - Misko Hevery](https://www.youtube.com/watch?v=RlfLCWKxHJ0)
-[Growing Object-Oriented Software, Guided by Tests](http://www.amazon.com/dp/0321503627/?tag=ebooks0056-20)
-[Mocks for Commands, Stubs for Queries](http://blog.ploeh.dk/2013/10/23/mocks-for-commands-stubs-for-queries/)
+* [TestDrivenDevelopment - Martin Fowler](http://martinfowler.com/bliki/TestDrivenDevelopment.html)
+* [Outside in development with double loop TDD - Emily Bache](http://coding-is-like-cooking.info/2013/04/outside-in-development-with-double-loop-tdd/)
+* [Unit Testing - Misko Hevery](https://www.youtube.com/watch?v=wEhu57pih5w)
+* [Don't look for things - Misko Hevery](https://www.youtube.com/watch?v=RlfLCWKxHJ0)
+* [Growing Object-Oriented Software, Guided by Tests](http://www.amazon.com/dp/0321503627/?tag=ebooks0056-20)
+* [Mocks for Commands, Stubs for Queries](http://blog.ploeh.dk/2013/10/23/mocks-for-commands-stubs-for-queries/)
