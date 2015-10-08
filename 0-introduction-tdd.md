@@ -17,14 +17,14 @@ The idea behind this section is not to bash on a specific type of TDD, but rathe
 ### Classic TDD
 This approach was first popularized by Kent Beck. The idea behind this kind of TDD is to test an algorithm multiple times by using different inputs and validating the outputs. Typically, this leads to having tests on a class and hiding what's happening behind, hiding the direct dependencies of the class under test.
 
-For example, if a class' outputs are only dictated by its inputs, then a classic TDD is easy to write. (i.e. To test a sorting algorithm, you just have to give multiple inputs and have the corresponding expected outputs to verify it).
+For example, if [a class' outputs are only dictated by its inputs](https://en.wikipedia.org/wiki/Referential_transparency_(computer_science%29), then a classic TDD test is easy to write. (i.e. To test a sorting algorithm, you just have to give multiple inputs and have the corresponding expected outputs to verify it).
 
 Unfortunately, not all situations are like that. Take for example an application that fetches data from an external source like a web API. In that case, the test doesn't only consist in checking outputs based on specific inputs. The actual output of the class will depend on its environment.
 
 ### Mockist TDD
 Also called London School TDD, this approach was popularized by [Steve Freeman and Nat Pryce](http://www.growing-object-oriented-software.com/), and is focused on verifying interactions of a class within its ecosystem. It is also a good tool to drive the design of an application.
 
-One of the strengths of Mockist TDD is that it helps organizing the layers and the dependencies of an application. For example, a lot of tests written using this kind of TDD will consist in checking that a class delegates an action the correct collaborator with the correct values.
+One of the strengths of Mockist TDD is that it helps organizing the layers and the dependencies of an application. For example, a lot of tests written using this kind of TDD will consist in checking that a class delegates an action the correct collaborator with the correct values. Other tests might consist in verifying that the tested class reacts correctly to its collaborators' responses.
 
 This kind of test helps verifying the communication doesn't bypass layers of the application. It also helps ensuring that the [Tell don't ask principle](http://programmers.stackexchange.com/a/157527) is respected.
 
@@ -43,13 +43,30 @@ Here's a quote from James Shore that defines [Dependency Injection](http://www.j
 
 Basically, it allows to control the outside environment. For example, given a class `A` that makes an HTTP request to an API and uses the data to do some computation, the constructor of `A` would receive an instance of the class `B` that is responsible of making that HTTP request. `A` would only use the data provided by `B`.
 
-In a testing context, one could pass a fake instance of `B` to `A` with controlled, predictable return values. Different types of fake objects exist, and they are usually grouped under the name "test double".
+In a testing context, one could pass an instance of `B` to `A` with controlled, predictable return values. 
+
+There exists multiple ways of making objects behave in a controlled/predictable way. Suchs objects are usually called "test doubles". In the testing jargon, the different types of test doubles are:
+* Stub
+* Mock
+* Dummy
+* Fake
+
+Martin Fowler wrote a good [reference](http://martinfowler.com/articles/mocksArentStubs.html#TheDifferenceBetweenMocksAndStubs) on the different types of test doubles. Mark Seeman also has written an excellent [article](http://blog.ploeh.dk/2013/10/23/mocks-for-commands-stubs-for-queries/http://blog.ploeh.dk/2013/10/23/mocks-for-commands-stubs-for-queries/) explaining when to use Mocks and Stubs.
 
 In a Mockist TDD context, one would pass `A`'s collaborators by constructor parameters and then test the behaviour of `A` when it interacts with them. Such behaviour can be verified via the usage of a mock object.
 
 A Mock is an object that has expectations of interactions with other objects. It is used to verify that a call that was expected to happen really happened.
 
-Martin Fowler wrote a good [reference](http://martinfowler.com/articles/mocksArentStubs.html#TheDifferenceBetweenMocksAndStubs) on the different types of test doubles. And Mark Seeman has a super [article](http://blog.ploeh.dk/2013/10/23/mocks-for-commands-stubs-for-queries/http://blog.ploeh.dk/2013/10/23/mocks-for-commands-stubs-for-queries/) explaining when to use Mocks and Stubs.
+## What should I use?
+There's Unfortunately no definitive answer to this. Both are good, just in different situations. It's only a question of tradeoffs. Here are a few points to consider:
+
+__*Generally*__
+* Classic TDD is better suited for algorithm testing
+* Mockist TDD is better suited for to check interactions between components of a system
+* Mockist TDD will create many collaborating classes soon in the process, where Classic TDD will push the creation of collaborators to later in the process.
+* A code base written with mockist TDD is harder to refactor because a change in a collaborator's API is likely to break a test
+* A code base written with classic TDD is easier to refactor; an implementation change doesn't break tests
+* Mockist TDD leads to an end-to-end implementation easily when using a [Walking Skeleton](http://c2.com/cgi/wiki?WalkingSkeleton).
 
 ## Conclusion
 As a summary, classic TDD works better when testing algorithms and Mockist TDD is better when verifying interactions between components of a system. 
