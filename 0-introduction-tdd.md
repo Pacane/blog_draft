@@ -57,6 +57,113 @@ In a Mockist TDD context, one would pass `A`'s collaborators by constructor para
 
 A Mock is an object that has expectations of interactions with other objects. It is used to verify that a call that was expected to happen really happened.
 
+## Examples
+
+### Classic TDD
+As said before, classic TDD is easier to use in an algorithm context. Let's take as an example the Leap Years Kata.
+
+> Write a function that returns true or false depending on whether its input integer is a leap year or not.
+
+> A leap year is defined as one that is divisible by 4,
+but is not otherwise divisible by 100 unless it is
+also divisible by 400.
+
+> For example, 2001 is a typical common year and 1996
+is a typical leap year, whereas 1900 is an atypical
+common year and 2000 is an atypical leap year.
+
+A typical code base written with classical TDD would end up with several test cases trying different inputs and expecting specific outputs.
+
+```java
+@Test
+public void 2001_isCommon() {
+    boolean result = isLeapYear(2001);
+
+    assertThat(result).isFalse();
+}
+
+@Test
+public void 1996_isLeap() {
+    boolean result = isLeapYear(1996);
+
+    assertThat(result).isTrue();
+}
+
+// more test cases until there are enough to triangulate all the possible scenarios
+
+boolean isLeapYear(int year) {
+    return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);   
+}
+```
+
+### Mockist TDD
+The simple situations to illustrate where mockist TDD shines are hard to come up with. But let's give it a try with an example involving a Web api.
+Let's imagine an endpoint that returns a username when it is given the user's id.
+
+```java
+class Endpoint {
+    UserInformationService userInformationService;
+    ResponseFactory responseFactory;
+
+    EndPoint(UserInformationService userInformationService, ResponseFactory responseFactory) {
+        this.userInformationService = userInformationService;
+        this.responseFactory = responseFactory;
+    }
+
+    public Response getUsername(int id) {
+        try {
+            String username = userInformationService.getUsername(id);
+            return responseFactory.createOk(username);
+        catch (NotFoundException ex) {
+            return responseFactory.createNotFound();
+        }
+    }
+}
+
+// This test is written using mockito, and the creation of mock object was omitted to keep it brief.
+
+private final String A_USERNAME = "Bobby";
+private final int USER_ID = 1337;
+
+@Test
+public void getUsername_delegatesToUserInformationService() {
+    given(userInformationService.getUsername(USER_ID)).willReturn(A_USERNAME);
+
+    endpoint.getUsername(USER_ID);
+
+    verify(userInformationService).getUsername(A_USERNAME);
+}
+
+@Test
+public void getUsername_returnsOkWhenUserIsFound() {
+    Response OK_RESPONSE = new OkResponse();
+    given(responseFactory.createOk(A_USERNAME)).willReturn(OK_RESPONSE);
+
+    given(userInformationService.getUsername(USER_ID)).willReturn(A_USERNAME);
+    
+    Response result = endpoint.getUsername(USER_ID);
+
+    assertThat(result).isSameAs(OK_RESPONSE);
+}
+
+@Test
+public void getUser_returnsNotFoundWhenUserIsNotFound() {
+    Response NOT_FOUND_RESPONSE = new NotFoundResponse();
+    given(responseFactory.createNotFound()).willReturn(NOT_FOUND_RESPONSE);
+
+    given(userInformationService.getUsername(USER_ID)).willThrow(NotFoundException.class);
+
+    Response result = endpoint.getUsername(USER_ID);
+
+    assertThat(result).isSameAs(NOT_FOUND_RESPONSE);
+}
+```
+
+Some people would arguably remove the first test because the behaviour it is covering is also covered in the other tests. It's really a matter of preference.
+
+The design that emerged from these tests is directly linked to the use of mockist TDD and by the objective of getting a piece of code that's as easy as possible to test.
+This is where the collaborating classes (the factory and the user information service) came from.
+
 ## What should I use?
 There's Unfortunately no definitive answer to this. Both are good, just in different situations. It's only a question of tradeoffs. Here are a few points to consider:
 
