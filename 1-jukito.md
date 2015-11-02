@@ -47,4 +47,27 @@ is also possible to bind the interface to whatever implementation
 you like. To do so, we have to declare a Jukito module in the test
 class.
 
-{gist https://gist.github.com/olafleur/66731cbcd84a87f3bccb}
+{gist https://gist.github.com/olafleur/66731cbcd84a87f3bccb }
+
+There is another cool use case for Jukito and Guice. A lot of Java
+code use factories. Guice has the ability to generate a factory
+implementation from an interface. We can either inject a mock
+factory or create a real factory with a binding in the Jukito
+module.
+
+The first case would be to inject a mock factory as in the second
+gist, where we used Jukito.
+
+The second case would be that we want to inject a real implementation :
+{gist https://gist.github.com/Pacane/fb69ae49d72fc36dc219}
+
+We had to change the code a little bit here so that the factory
+would be managed by Guice. As you can see, the scope of the test
+is a little bit wider. The test verify that the endpoint returns
+the correct status code.
+
+There is no best solution, it mostly depends on the level of
+integration you want your test to have. In the first, the response
+would be the one that you crafted yourself, whereas in the second,
+the response returned by the `ResponseFactory` would be the same
+as in production.
