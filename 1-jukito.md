@@ -1,37 +1,50 @@
-# Testing series - Jukito
-Many people have been asking us how we do to test our GWTP applications. Today, I'm starting the first of a series of blog posts about tests in GWTP. I'll show you what my setup, libraries and practices are in details. I'll try to cover basic stuff as well as more advanced stuff and "gotchas" that I face in my day-to-day work.
+## Introduction to Jukito
 
-## Prerequisites
-* There are multiple ways of developing and testing, but the way I prefer is [Outside-in](http://coding-is-like-cooking.info/2013/04/outside-in-development-with-double-loop-tdd/) testing (often referred to as [London School of TDD](http://coding-is-like-cooking.info/2013/04/the-london-school-of-test-driven-development/), *top-down* or *mockist TDD*). Note that you should understand the differences between classical and mockist TDD, and also know when to use both of them.
-* Know about TDD (*Test Driven Development*) <!-- Point to a good refence -->
-* Understand [dependency injection](http://www.jamesshore.com/Blog/Dependency-Injection-Demystified.html)
+### What is Jukito?
+Jukito is a Java library that allows you to reduce the boilerplate
+when writing tests that cover code that is written using dependency
+injection. Typically, people use Mockito to mock their dependencies
+and it ends up being cumbersome.
+Jukito creates mocks for you for all the injected dependencies.
 
-## Lessons
-* Lesson I - Jukito
-* Lesson II - TDD with GWTP
-* Lesson III - Testing a Presenter
-* Lesson IV - Testing Inter-Presenter communication
-* Lesson V - Testing client-server communication
-* Lesson VI - Integrated tests
+Here is an example done with Mockito and an example done with Jukito.
 
-## Jukito
-Jukito is a great tool that combines Guice and Mockito for JUnit. 
+{gist https://gist.github.com/Pacane/aa06781e61d71596a17c}
 
-Most of the time, when people start using dependency injection in their application, a complex hierarchy of classes emerges. This makes code hard to maintain and hard to test; you have to maintain a boostrapping class, makes refactoring of constructors/dependencies painful and finally makes testing much harder because of complex objects initialization.
+{gist https://gist.github.com/Pacane/d9fc72e469ee4eb53f7b}
 
-The solutions to these problems are Guice and Mockito.
+As you can see, the only difference is that Jukito doesn't have to
+call the constructor and the annotations are `@Inject` instead of
+`@Mock`.
+Also, there is also the `initMocks()` function call that isn't needed
+anymore.
 
-### Guice
-Guice is a dependency injection framework for Java. It allows you to design better APIs by reducing the need for factories and *new*s in your code. It also gives you a nice API to bootstrap your code with a modular approach. It works with Java's `@Inject` annotation.
+At first, it doesn't look like a big deal, but when the code base
+grows, things can get out of control. For example, just imagine that
+we want to add a new dependency to the `Endpoint` class and inject
+it via constructor.
 
-### Mockito
-Mockito is a mocking/stubbing framework for JUnit. It allows you to create stubs and mocks easily for your tests.
+In the first case, it won't compile anymore, but in the second case,
+the tests will still pass.
 
-Now that's where Jukito comes handy. If you've used Guice with `@Inject` and use Mockito heavily in your test code, a lot of boilerplate code can be removed, making the tests easier to read, easier to write and maintain.
+Take note that code using Jukito must use Java's `@Inject` annotation
+to know that it has to inject a class its dependencies.
 
-### An example
-Let's imagine an application where encrypted messages get sent over the network to other users. 
+### Ok, so what now?
 
-**MessageEncrypter.java**
+It also happens that Jukito leverages the power of Guice.
+As you probably know, Guice is a pretty powerful tool. So, Jukito has
+a lot of superpowers because of that.
 
-**MessageSender.java**
+Everything that is possible in a Guice Module can also be done in a
+Jukito module.
+
+Let's say you have an interface called `UserInformationService`.
+You could have a test that uses a fake implementation, another test
+that uses the real implementation and another test that uses a mock
+implementation. By default, Jukito injects a Mockito mock, but it
+is also possible to bind the interface to whatever implementation
+you like. To do so, we have to declare a Jukito module in the test
+class.
+
+{gist https://gist.github.com/olafleur/66731cbcd84a87f3bccb}
