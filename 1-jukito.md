@@ -1,7 +1,7 @@
 # Introduction to Jukito
 In this second post of the Testing GWTP applications with Jukito, we present : Jukito!
 
-The purpose of this post is to show the basics of Jukito, and what the advantages for you and for your project.
+The purpose of this post is to show the basics of Jukito, and to show what the advantages for you and for your project.
 
 
 ## What is Jukito?
@@ -24,7 +24,7 @@ At first, it doesn't look like a big deal, but when the code base grows, things 
 With Mockito, this kind of change will produce a compilation error. On the other hand, with Jukito, everything still compiles fine, since the call site doesn't change.
 
 ## OK, what now?
-Jukito uses [Google Guice](https://github.com/google/guice) and behind the scenes. However, even if you're not using Guice, you can still use Jukito. 
+Jukito uses [Google Guice](https://github.com/google/guice) and Mockito behind the scenes. However, even if you're not using Guice, you can still use Jukito. 
 The only requirement to use Jukito is to use Java's standard annotation `@Inject` on your class' constructor.
 
 Everything that is possible in a Guice Module can also be done in a
