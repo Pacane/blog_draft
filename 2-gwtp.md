@@ -21,7 +21,7 @@ The first case is to populate the view with data taken from a client side servic
 
 When data doesn't need to change once a Presenter is bound, it is a good idea to put the expensive work in the `onBind()` in method. Here's how I would write the test and then the Presenter code.
 
-<!-- Insert gists here -->
+https://gist.github.com/Pacane/e92854d51788ef8eecd2
 
 You might have noticed that I don't include a test for the view here. The reason is fairly simple: I do not write it at all. This is justified by the fact that views usually don't have much logic; they're pretty "dumb". Pass a value or an object to the view and then assign it to the view. 
 
@@ -41,7 +41,7 @@ To continue our example, let's have a text box and a button in the view, that wi
 
 Here's how it looks like:
 
-<!-- Insert gists here -->
+https://gist.github.com/Pacane/f64a6b913df7327abc51
 
 ### Interactions with the `PlaceManager`
 
@@ -54,22 +54,19 @@ For the first one, this decision is made in the `prepareFromRequest` method of a
 
 Let's adapt our current example so that now, we have multiple users in the system, and based on the ID parameter that is passed in the `PlaceRequest`, we have to display that specific user's information.
 
-<!-- insert gists here 
-    UserService
-    ClientModule (to use RouteTokenFormatter)
---> 
+https://gist.github.com/Pacane/d5076cf3cc5c12d13a26
 
 Our first test will need to verify that the view displays the correct user's information, based on an ID received as a parameter. Here's how it looks like:
 
-<!-- insert test gist here -->
+
+https://gist.github.com/Pacane/5d299496e4c955adfda7
+
 
 And now we have to implement this in our Presenter:
 
-<!-- insert presenter code gist -->
+https://gist.github.com/Pacane/4aac8a0d4643e861416a
 
-The other type of interactions is when you want to reveal a particular place. Currently, you have to know the exact URL to be able to edit a user's information. For the moment, there's no homepage, so let's add another page containing the list of users with the proper link to edit the users' name. This will also be the place to return once we save a user, using the `PlaceManager`.
-
-<!-- insert basic gist of users page -->
+The other type of interactions is when you want to reveal a particular place. Currently, you have to know the exact URL to be able to edit a user's information. For the moment, there's no homepage, so let's add another page containing the list of users with the proper link to edit the users' name. This will also be the place to return once we save a user, using the `PlaceManager`. You can get an overview of the complete code [here](https://github.com/Pacane/TDD-GWTP/tree/6ac9e4d8ed9601911f20c8465333d21d39a65468).
 
 ### Interactions with the `EventBus`
 When interacting with the `EventBus`, there are two kinds of actions you want to verify. Firing an event, and handling an event.
@@ -78,38 +75,37 @@ We've added a delete button to remove the users from the page. We'll see how the
 
 Here's the code of the event we want to raise, and its handler:
 
-<!-- Event + handler gists -->
+https://gist.github.com/Pacane/89838afe5d793d1c37fc
 
 Now we want to adapt the `UserService` to fire that event when needed. Let's write the test for that:
 
-<!-- UserServiceImpl test -->
+https://gist.github.com/Pacane/df523f76929ac4f2ed2e
 
 And now implement it:
 
-<!-- UserServiceImpl code -->
+https://gist.github.com/Pacane/a5f93b22b46ca66cacd1
 
 That's it!
 
 Now in the Presenter, we have to handle that. Let's write the tests to wire the `UiHandlers` and the Presenter.
 
-<!-- UsersPresenter UiHandlers wiring tests -->
+https://gist.github.com/Pacane/219e5fba3ef8dba3c365
 
 As you can see here, there's a little trick with Jukito that we have to add (the `JukitoModule` part), so that the `onBind()` method doesn't get called automatically when running the test. We'll talk a little bit more about this at the end of the the post.
 
 And then the event handling:
 
-<!-- Event handling gist -->
+https://gist.github.com/Pacane/5e8214ad3316427bb0ff
 
 Finally, the implementation:
 
-<!-- Presenter Implementation -->
+https://gist.github.com/Pacane/2079bbc92f06d325fe6d
 
 Voilà!
 
-As a bonus, here's the [final code with a working view](<!-- GITHUB LINK -->).
+As a bonus, here's the [final code with a working view](https://github.com/Pacane/TDD-GWTP).
 
 ## Conclusion
-
 With this post, you should now be able to understand how to write basic tests in a TDD workflow in GWTP. There are a couple more complex scenarios that we'll talk about in the next posts. Namely, testing communication with a server using REST-Dispatch and also tricks, tips and gotchas with Jukito, like the `JukitoModule` configuration that you saw in the examples above.
 
 Note that we would have designed the application a bit differently if it were for a real project, but this was mostly for the sake of the demonstration.
