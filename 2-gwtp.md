@@ -14,7 +14,7 @@ In this posts we will go through these specific topics:
 - Interactions Presenter → View
 - Interactions View → Presenter
 - Interactions with the `PlaceManager`
-- Communication between Presenters
+- Interactions with the `EventBus`
 
 ### Interactions Presenter → View
 The first case is to populate the view with data taken from a client side service or a backend. Let's imagine we want to fill a label with the name of a user.
@@ -70,3 +70,48 @@ And now we have to implement this in our Presenter:
 The other type of interactions is when you want to reveal a particular place. Currently, you have to know the exact URL to be able to edit a user's information. For the moment, there's no homepage, so let's add another page containing the list of users with the proper link to edit the users' name. This will also be the place to return once we save a user, using the `PlaceManager`.
 
 <!-- insert basic gist of users page -->
+
+### Interactions with the `EventBus`
+When interacting with the `EventBus`, there are two kinds of actions you want to verify. Firing an event, and handling an event.
+
+We've added a delete button to remove the users from the page. We'll see how the `UserService` fires an event when a user gets deleted, and how the `UsersPresenter` handles that situation.
+
+Here's the code of the event we want to raise, and its handler:
+
+<!-- Event + handler gists -->
+
+Now we want to adapt the `UserService` to fire that event when needed. Let's write the test for that:
+
+<!-- UserServiceImpl test -->
+
+And now implement it:
+
+<!-- UserServiceImpl code -->
+
+That's it!
+
+Now in the Presenter, we have to handle that. Let's write the tests to wire the `UiHandlers` and the Presenter.
+
+<!-- UsersPresenter UiHandlers wiring tests -->
+
+As you can see here, there's a little trick with Jukito that we have to add (the `JukitoModule` part), so that the `onBind()` method doesn't get called automatically when running the test. We'll talk a little bit more about this at the end of the the post.
+
+And then the event handling:
+
+<!-- Event handling gist -->
+
+Finally, the implementation:
+
+<!-- Presenter Implementation -->
+
+Voilà!
+
+As a bonus, here's the [final code with a working view](<!-- GITHUB LINK -->).
+
+## Conclusion
+
+With this post, you should now be able to understand how to write basic tests in a TDD workflow in GWTP. There are a couple more complex scenarios that we'll talk about in the next posts. Namely, testing communication with a server using REST-Dispatch and also tricks, tips and gotchas with Jukito, like the `JukitoModule` configuration that you saw in the examples above.
+
+Note that we would have designed the application a bit differently if it were for a real project, but this was mostly for the sake of the demonstration.
+
+Have fun!
