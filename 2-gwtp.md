@@ -1,4 +1,5 @@
 # Testing patterns in GWTP
+This post is intended to be the next steps towards a TDD approach with GWTP. We'll try to show you the patterns and workflow of writing a GWTP application in a TDD fashion.
 
 ## Prerequisites 
 - Understanding MVP and GWTP. See [this blog post](http://blog.arcbees.com/2015/09/02/gwtp-beginners-tutorial/) for more information.
